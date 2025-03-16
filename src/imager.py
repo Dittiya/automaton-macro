@@ -1,22 +1,27 @@
-from win32gui import FindWindow, GetWindowRect, SetForegroundWindow
+from win32gui import FindWindow, GetWindowRect, SetForegroundWindow, GetClientRect
 from typing import NamedTuple
 from mss import mss, tools
 import time
+from ctypes import windll
+
+# Make program aware of DPI scaling
+user32 = windll.user32
+user32.SetProcessDPIAware()
 
 IMAGE_OUTPUT = "images/capture.png"
 
 class Window(NamedTuple):
-    id: int
-    top: int
+    hwnd: int
     left: int
+    top: int
     width: int
     height: int
 
 def GetWindowData(name: str) -> Window:
     try:
-        window_id = FindWindow(None, name)
-        window_rect = GetWindowRect(window_id)
-        window = Window(window_id, window_rect[0], window_rect[1], window_rect[2], window_rect[3])
+        hwnd = FindWindow(None, name)
+        left, top, right, bottom = GetWindowRect(hwnd)
+        window = Window(hwnd, left, top, right-left, bottom-top)
     except:
         raise TypeError("Window not found")
 
@@ -25,9 +30,8 @@ def GetWindowData(name: str) -> Window:
 def GrabWindow(window: Window) -> None:
     sct = mss()
 
-    SetForegroundWindow(window.id)
+    SetForegroundWindow(window.hwnd)
     time.sleep(0.01)
-
+    
     sct_img = sct.grab(window._asdict())
-
     tools.to_png(sct_img.rgb, sct_img.size, output=IMAGE_OUTPUT)
