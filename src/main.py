@@ -24,13 +24,10 @@ def grabber(automaton: Automaton):
     automaton.grab()
     
 def log(automaton: Automaton):
-    x, y = automaton.get_cursor_position()
-    print(f"Window {automaton.window}")
-    print(f"Cursor Screen position ({x}, {y})")
-    print(f"Cursor Window position ({x - automaton.window.left}, {y - automaton.window.top})")
+    print(automaton.dir)
 
 def region(automaton: Automaton):
-    automaton.grab_roi()
+    automaton.grab_roi("node")
 
 def main():
     atom = Automaton("LimbusCompany")
