@@ -17,7 +17,7 @@ class Window(NamedTuple):
     width: int
     height: int
 
-def GetWindowData(name: str) -> Window:
+def get_window_data(name: str) -> Window:
     try:
         hwnd = FindWindow(None, name)
         left, top, right, bottom = GetWindowRect(hwnd)
@@ -27,11 +27,22 @@ def GetWindowData(name: str) -> Window:
 
     return window
 
-def GrabWindow(window: Window) -> None:
+def grab_window(window: Window) -> None:
     sct = mss()
 
     SetForegroundWindow(window.hwnd)
     time.sleep(0.01)
-    
+
     sct_img = sct.grab(window._asdict())
     tools.to_png(sct_img.rgb, sct_img.size, output=IMAGE_OUTPUT)
+
+def set_window_top(window: Window) -> None:
+    SetForegroundWindow(window.hwnd)
+
+def grab_region(window: Window, output: str) -> None:
+    if [x for x in [window, output] if x is None]:
+        return TypeError("Type must not be None")
+
+    sct = mss()
+    sct_img = sct.grab(window._asdict())
+    tools.to_png(sct_img.rgb, sct_img.size, output=output)
