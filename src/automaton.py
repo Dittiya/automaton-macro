@@ -10,6 +10,7 @@ class Automaton:
         self.vision = None
         self.window = get_window_data(self.name)
         self.delay = 0
+        self.img_storage = os.path.abspath(os.path.dirname(__file__)).replace("src", "images")
         self._roi_coordinate = None
 
     def get_cursor_position(self) -> None:
@@ -59,8 +60,24 @@ class Automaton:
             
         pyautogui.drag(x, y, 0.25, button=btn)
 
-    def grab_roi(self):
+    def grab_roi(self, name: str) -> None:
         x, y = self.get_cursor_position()
+
+        try:
+            os.makedirs(self.img_storage)
+        except FileExistsError:
+            pass
+
+        # Janky might fix later
+        output = f"{self.img_storage}\{name}.png"
+        existing_img = [img for img in os.listdir(self.img_storage) if f"{name}_" in img]
+        if not existing_img:
+            output = output.replace(name, f"{name}_1")
+        else:
+            index = existing_img[-1].split(".")[0]
+            index = int(index.split("_")[-1]) + 1
+
+            output = output.replace(name, f"{name}_{index}")
 
         if self._roi_coordinate is not None:
             print(f"Ending position ({x},{y})")
@@ -71,7 +88,7 @@ class Automaton:
                                    height=y-self._roi_coordinate[1])
             
             print(region_window)
-            grab_region(region_window, "test_region.png")
+            grab_region(region_window, output)
             self._roi_coordinate = None
         else:
             print(f"Starting position ({x},{y})")
