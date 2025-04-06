@@ -1,5 +1,5 @@
 from cv2.typing import MatLike
-from feature_detection import match_feature, detect_feature
+from automaton.feature_detection import match_feature, detect_feature
 from limbus.data import Config, Encounter, Encounters, Node
 from math import dist
 import cv2 as cv
