@@ -20,6 +20,12 @@ class Node:
     height: int 
     connection: list["Node"]
 
+    def get_center(self) -> list:
+        return [int(self.x+self.width/2), int(self.y+self.height/2)]
+    
+    def add_connection(self, node):
+        return self.connection.append(node)
+
 @dataclass
 class Encounter:
     name: str
