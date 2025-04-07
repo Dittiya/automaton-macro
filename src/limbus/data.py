@@ -23,7 +23,7 @@ class Node:
     def get_center(self) -> list:
         return [int(self.x+self.width/2), int(self.y+self.height/2)]
     
-    def add_connection(self, node):
+    def add_connection(self, node: "Node"):
         return self.connection.append(node)
 
 @dataclass
