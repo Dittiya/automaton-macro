@@ -12,6 +12,7 @@ class Config:
 
 @dataclass
 class Node:
+    id: int
     name: str
     type: int
     x: int 
@@ -37,3 +38,8 @@ class Encounters(Enum):
     ELITE = 1
     FOCUSED = 2
     REGULAR = 3
+
+class Deviations(Enum):
+    TOP = -1
+    MIDDLE = 0
+    BOTTOM = 1
