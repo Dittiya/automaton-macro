@@ -198,11 +198,14 @@ class Dungeon:
 
         return self.lines
 
-    def crawl(self):
+    def crawl(self) -> list:
+        """
+        Returns the id of nodes with shortest path
+        """
         nodes = [node for node in self.nodes if node.id <= 3]
         temp = Node(0, "node_0", 0, 0, 0, 0, 0, nodes)
         crawler = {}
 
         find_paths(temp, crawler)
 
-        return crawler
+        return crawler[sorted(crawler)[0]]
