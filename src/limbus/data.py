@@ -12,6 +12,7 @@ class Config:
 
 @dataclass
 class Node:
+    id: int
     name: str
     type: int
     x: int 
@@ -19,6 +20,12 @@ class Node:
     width: int 
     height: int 
     connection: list["Node"]
+
+    def get_center(self) -> list:
+        return [int(self.x+self.width/2), int(self.y+self.height/2)]
+    
+    def add_connection(self, node: "Node"):
+        return self.connection.append(node)
 
 @dataclass
 class Encounter:
@@ -31,3 +38,8 @@ class Encounters(Enum):
     ELITE = 1
     FOCUSED = 2
     REGULAR = 3
+
+class Deviations(Enum):
+    TOP = -1
+    MIDDLE = 0
+    BOTTOM = 1
