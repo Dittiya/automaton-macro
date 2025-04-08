@@ -5,7 +5,7 @@ Simple automation framework tool mainly to use with Limbus Company Mirror Dungeo
 
 ### Missing features
 - <s>Line detection</s>
-- Node connections
-- Node crawling
+- <s>Node connections</s>
+- <s>Node crawling</s>
 - Event handler 
 - Inventory/Store automation (kinda hard tbh)
