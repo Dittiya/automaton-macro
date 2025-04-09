@@ -3,7 +3,7 @@ from automaton.feature_detection import match_feature, detect_feature
 from limbus.data import Config, Encounter, Encounters, Node, Deviations
 from limbus.utils import min_max
 from math import dist
-import cv2 as cv
+import cv2
 import os
 import numpy
 
@@ -105,7 +105,7 @@ class Dungeon:
 
     def map_encounters(self, dir: str):
         for file in os.listdir(dir):
-            image = cv.imread(f"{dir}\\{file}", cv.IMREAD_GRAYSCALE)
+            image = cv2.imread(f"{dir}\\{file}", cv2.IMREAD_GRAYSCALE)
             _, descriptor = detect_feature(image, self.edge_threshold)
 
             name = file.split(".")[0]
@@ -171,8 +171,8 @@ class Dungeon:
     
     def find_lines(self):
         img = self.dungeon
-        img = cv.GaussianBlur(img, (3,3), 0)
-        img = cv.Canny(img, 15, 75)
+        img = cv2.GaussianBlur(img, (3,3), 0)
+        img = cv2.Canny(img, 15, 75)
 
         lines_roi = get_lines_roi(img, self.nodes)
 
@@ -186,7 +186,7 @@ class Dungeon:
 
         index = 0
         for roi in lines_roi:
-            hough_lines = cv.HoughLinesP(roi, **kwargs)
+            hough_lines = cv2.HoughLinesP(roi, **kwargs)
 
             for i, line in enumerate(hough_lines):
                 has_dupe = check_duplicate(i, hough_lines, 50)
