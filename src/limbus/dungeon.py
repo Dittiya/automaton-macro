@@ -2,6 +2,7 @@ from cv2.typing import MatLike
 from automaton.feature_detection import match_feature, detect_feature
 from limbus.data import Config, Encounter, Encounters, Node, Deviations
 from limbus.utils import min_max
+from limbus.image import process_image
 from math import dist
 import cv2
 import os
@@ -38,6 +39,9 @@ def get_lines_roi(dungeon, nodes) -> list:
     return roi
 
 def min_distance_lines(node: Node, lines: list, threshold: int=0.1) -> list:
+    # works under the assumption that there will always be a line closest to a node
+    # else will cause a bug where lines from another area is categorized as the closest line
+
     distances = []
     for line in lines:
         x1, y1, _, _ = line[0]
@@ -54,15 +58,16 @@ def find_paths(node: Node, crawler: dict, point: int=0, path: list=[]) -> None:
     path.append(node.id)
 
     if len(node.connection) == 0:
+        if 0 in path:
+            path.remove(0)
+
         crawler[point] = path.copy()
+        
         return None
     
     for i, _ in enumerate(node.connection):
         find_paths(node.connection[i], crawler, point)
         path.pop()
-
-    if 0 in path:
-        path.remove(0)
 
     return None
 
@@ -151,8 +156,9 @@ class Dungeon:
                 y_start = self.config.y_start
                 x_start += x_stride
 
+        dungeon = process_image(self.dungeon, ["gray"])
         for node in self.nodes:
-            img = self.dungeon[node.y:node.y+node.height, node.x:node.x+node.width]
+            img = dungeon[node.y:node.y+node.height, node.x:node.x+node.width]
             _, descriptor = detect_feature(img, self.edge_threshold)
 
             if descriptor is None:
@@ -170,18 +176,16 @@ class Dungeon:
         return self.nodes
     
     def find_lines(self):
-        img = self.dungeon
-        img = cv2.GaussianBlur(img, (3,3), 0)
-        img = cv2.Canny(img, 15, 75)
+        img = process_image(self.dungeon, ["gray", "thresh", "canny"])
 
         lines_roi = get_lines_roi(img, self.nodes)
 
         kwargs = {
             "rho": 1,
             "theta": numpy.pi / 180,
-            "threshold": 35,
+            "threshold": 50,
             "minLineLength": 25,
-            "maxLineGap": 60
+            "maxLineGap": 50
         }
 
         index = 0
