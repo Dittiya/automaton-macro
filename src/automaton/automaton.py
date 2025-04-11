@@ -1,4 +1,4 @@
-from imager import Window, get_window_data, grab_window, set_window_top, grab_region
+from automaton.imager import Window, get_window_data, grab_window, set_window_top, grab_region
 import os
 import pyautogui 
 import time
