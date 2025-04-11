@@ -38,9 +38,9 @@ def process_image(img: MatLike, flags=[]):
             case "thresh":
                 mean, median = numpy.mean(im), numpy.median(im)
 
+                thresh = 50
                 if median < 5: thresh = 20
                 elif median < 10: thresh = 30
-                elif median < 15: thresh = 50
 
                 im = thresholding(im, thresh)
         
