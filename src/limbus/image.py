@@ -34,10 +34,14 @@ def process_image(img: MatLike, flags=[]):
             case "blur":
                 im = blur_image(im)
             case "canny":
-                im = canny_edge_detection(im)
+                im = canny_edge_detection(im, 50, 100)
             case "thresh":
                 mean, median = numpy.mean(im), numpy.median(im)
-                thresh = 30 if median < 10 else 50
+
+                if median < 5: thresh = 20
+                elif median < 10: thresh = 30
+                elif median < 15: thresh = 50
+
                 im = thresholding(im, thresh)
         
     return im
