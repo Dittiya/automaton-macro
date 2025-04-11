@@ -4,6 +4,7 @@ from limbus.data import Config, Encounter, Encounters, Node, Deviations
 from limbus.utils import min_max
 from limbus.image import process_image
 from math import dist
+from collections import defaultdict
 import cv2
 import os
 import numpy
@@ -61,7 +62,7 @@ def find_paths(node: Node, crawler: dict, point: int=0, path: list=[]) -> None:
         if 0 in path:
             path.remove(0)
 
-        crawler[point] = path.copy()
+        crawler[point].append(path.copy())
         
         return None
     
@@ -208,8 +209,9 @@ class Dungeon:
         """
         nodes = [node for node in self.nodes if node.id <= 3]
         temp = Node(0, "node_0", 0, 0, 0, 0, 0, nodes)
-        crawler = {}
+        crawler = defaultdict(list)
 
         find_paths(temp, crawler)
+        print(crawler)
 
         return crawler[sorted(crawler)[0]]
