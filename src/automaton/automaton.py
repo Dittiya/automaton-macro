@@ -4,13 +4,13 @@ import pyautogui
 import time
 
 class Automaton:
-    def __init__(self, name: str, state: bool=False):
+    def __init__(self, name: str):
         self.name = name
-        self.state = state
+        self.state = False
         self.vision = None
         self.window = get_window_data(self.name)
-        self.delay = 0
-        self.img_storage = os.path.abspath(os.path.dirname(__file__)).replace("src", "images")
+        self.delay = 0.05
+        self.img_storage = f"{Path().absolute().resolve()}\images"
         self._roi_coordinate = None
 
     def __normalize_XY(self, x: int|list|tuple, y: int):
