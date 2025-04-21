@@ -111,7 +111,7 @@ class Dungeon:
 
     def map_encounters(self, dir: str):
         for file in os.listdir(dir):
-            image = cv2.imread(f"{dir}\\{file}", cv2.IMREAD_GRAYSCALE)
+            image = cv2.imread(f"{dir}\{file}", cv2.IMREAD_GRAYSCALE)
             _, descriptor = detect_feature(image, self.edge_threshold)
 
             name = file.split(".")[0]
@@ -212,6 +212,5 @@ class Dungeon:
         crawler = defaultdict(list)
 
         find_paths(temp, crawler)
-        print(crawler)
 
-        return crawler[sorted(crawler)[0]]
+        return crawler[sorted(crawler)[0]][0]
