@@ -1,8 +1,10 @@
 from win32gui import FindWindow, GetWindowRect, SetForegroundWindow, GetClientRect
 from typing import NamedTuple
+from cv2.typing import MatLike
 from mss import mss, tools
-import time
 from ctypes import windll
+import cv2
+import time
 
 # Make program aware of DPI scaling
 user32 = windll.user32
@@ -46,3 +48,15 @@ def grab_region(window: Window, output: str) -> None:
     sct = mss()
     sct_img = sct.grab(window._asdict())
     tools.to_png(sct_img.rgb, sct_img.size, output=output)
+
+def read_image(dir: str, option: str="") -> MatLike:
+    img = cv2.imread(dir)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    if option in ["gray", "grey"]:
+        img = gray_image(img)
+
+    return img
+
+def gray_image(img: MatLike) -> MatLike:
+    return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
