@@ -13,6 +13,17 @@ class Automaton:
         self.img_storage = os.path.abspath(os.path.dirname(__file__)).replace("src", "images")
         self._roi_coordinate = None
 
+    def __normalize_XY(self, x: int|list|tuple, y: int):
+
+        if type(x) is not int:
+            if y is None:
+                x, y = x
+    
+        x += self.window.left
+        y += self.window.top
+
+        return x, y
+
     def get_cursor_position(self) -> None:
         return pyautogui.position()
 
