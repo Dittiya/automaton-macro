@@ -167,7 +167,7 @@ class Dungeon:
 
             candidates = []
             for encounter in self.encounters:
-                matches = match_feature(encounter.descriptor, descriptor, True)
+                matches = match_feature(encounter.descriptor, descriptor, sort=True)
                 distances = [match.distance for match in matches[:10]]
                 candidates.append(numpy.mean(distances))
             
