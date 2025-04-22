@@ -55,12 +55,15 @@ def min_distance_lines(node: Node, lines: list, threshold: int=0.1) -> list:
 
 # janky but it works
 def find_paths(node: Node, crawler: dict, point: int=0, path: list=[]) -> None:
-    point += node.type
+    point += -1 if node.type == 0 else node.type
     path.append(node.id)
 
     if len(node.connection) == 0:
         if 0 in path:
             path.remove(0)
+
+        if point < 0:
+            point = 0
 
         crawler[point].append(path.copy())
         
