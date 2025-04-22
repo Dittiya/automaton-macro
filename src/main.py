@@ -2,6 +2,7 @@ from automaton.automaton import Automaton
 from limbus.dungeon import Dungeon
 from limbus.data import Config
 from time import sleep
+from pathlib import Path
 import cv2
 import keyboard as kb
 
@@ -11,23 +12,18 @@ def Toggle(automaton: Automaton):
     else:
         automaton.start()
 
-def Run(automaton: Automaton):
-    if automaton.state:
-        print(f"{automaton.name} is currently running...")
-
-def vision(automaton: Automaton):
-    automaton.grab()
-
-def zoom(automaton: Automaton):
-    automaton.zoom(-200)
-
 def grabber(automaton: Automaton):
+    if automaton.state is False:
+        return
+
+    PARENT_DIR = Path().absolute().resolve()
+
     automaton.zoom(-6)
     automaton.drag(400, 300)
-    automaton.grab()
+    automaton.grab(mouse=False)
 
-    encounters = "D:\Repository\python-limbus\images\encounter"
-    img = cv2.imread("D:\Repository\python-limbus\images\capture.png")
+    encounters = f"{PARENT_DIR}\images\encounter"
+    img = cv2.imread(f"{PARENT_DIR}\images\capture.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     md = Dungeon(img, config=Config(), encounters_dir=encounters)
 
@@ -37,9 +33,37 @@ def grabber(automaton: Automaton):
     path = md.crawl()
 
     print(f"Shortest/Most rewarding path: {path}")
+
+    nodes = md.nodes
+    for id in path:
+        node = next(node for node in nodes if node.id == id)
+
+        automaton.zoom(-6)
+        automaton.drag(400, 300)
+        
+        x, y = node.get_center()
+        print(f"Clicking ({x},{y})")
+        automaton.click(x, y)
+        sleep(1)
+        automaton.press("enter")
+        sleep(0.5)
+        automaton.press("enter")
+        automaton.centerize_cursor()
+
+        while True:
+            sleep(0.75)
+            print("Waiting...")
+            automaton.grab(mouse=True)
+            if automaton.on_screen("D:\Repository\python-limbus\images\\anchor.png", 20):
+                break
+
+        sleep(1)
+    
+    print("FLOOR FINISHED!")
+
     
 def log(automaton: Automaton):
-    print(automaton.dir)
+    print(automaton.get_cursor_position())
 
 def region(automaton: Automaton):
     automaton.grab_roi("node")
