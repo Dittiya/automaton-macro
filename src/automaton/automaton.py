@@ -1,4 +1,6 @@
-from automaton.imager import Window, get_window_data, grab_window, set_window_top, grab_region
+from automaton.imager import Window, get_window_data, grab_window, set_window_top, grab_region, read_image
+from automaton.feature_detection import detect_feature, detect_object
+from pathlib import Path
 import os
 import pyautogui 
 import time
@@ -13,7 +15,7 @@ class Automaton:
         self.img_storage = f"{Path().absolute().resolve()}\images"
         self._roi_coordinate = None
 
-    def __normalize_XY(self, x: int|list|tuple, y: int):
+    def __normalize_XY(self, x: int|list|tuple, y: int) -> tuple[int, int]:
 
         if type(x) is not int:
             if y is None:
@@ -26,12 +28,9 @@ class Automaton:
 
     def get_cursor_position(self) -> None:
         return pyautogui.position()
-
-    def set_delay(self, delay: int):
-        self.delay = delay
     
     def start(self):
-        if self.state is not True:
+        if self.state is False:
             print(f"Starting {self.name}")
             self.state = True
 
@@ -40,11 +39,32 @@ class Automaton:
             print(f"Stopping {self.name}")
             self.state = False
 
-    def grab(self):
+    def click(self, x: int|list|tuple, y: int|None, clicks: int=1) -> None:
+        x, y = self.__normalize_XY(x, y)
+
+        pyautogui.moveTo(x, y)
+        pyautogui.click(x, y, clicks=clicks, interval=self.delay)
+        return
+    
+    def on_screen(self, target: str, minimum: int=10) -> bool:
+        target_img = read_image(target, "gray")
+        train_img = read_image(f"{self.img_storage}\capture.png", "gray")
+
+        _, target_desc = detect_feature(target_img, 10)
+        _, train_desc = detect_feature(train_img, 10)
+
+        return detect_object(target_desc, train_desc, min=minimum)
+
+    def press(self, key: str, clicks: int=1) -> None:
+        pyautogui.press(key, clicks, self.delay)
+
+    def grab(self, mouse: bool=True) -> None:
         if not self.state:
             return
         
-        pyautogui.moveTo(self.window.width+100, self.window.height+100)
+        if mouse is False:
+            pyautogui.moveTo(self.window.width+100, self.window.height+100)
+
         grab_window(self.window)
         print(f"Looking at {self.window}")
 
