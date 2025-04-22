@@ -163,7 +163,7 @@ class Dungeon:
             img = dungeon[node.y:node.y+node.height, node.x:node.x+node.width]
             _, descriptor = detect_feature(img, self.edge_threshold)
 
-            if descriptor is None:
+            if descriptor is None or len(descriptor) < 20:
                 continue
 
             candidates = []
