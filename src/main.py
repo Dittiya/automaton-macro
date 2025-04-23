@@ -19,13 +19,15 @@ def grabber(automaton: Automaton):
     PARENT_DIR = Path().absolute().resolve()
 
     automaton.zoom(-6)
-    automaton.drag(400, 300)
+    automaton.drag(-500, 300)
+
+    sleep(0.5)
     automaton.grab(mouse=False)
 
     encounters = f"{PARENT_DIR}\images\encounter"
     img = cv2.imread(f"{PARENT_DIR}\images\capture.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    md = Dungeon(img, config=Config(), encounters_dir=encounters)
+    md = Dungeon(img, config=Config(x_start=210), encounters_dir=encounters)
 
     md.map()
     md.find_lines()
@@ -39,7 +41,7 @@ def grabber(automaton: Automaton):
         node = next(node for node in nodes if node.id == id)
 
         automaton.zoom(-6)
-        automaton.drag(400, 300)
+        automaton.drag(-500, 300)
         
         x, y = node.get_center()
         print(f"Clicking ({x},{y})")
@@ -66,7 +68,7 @@ def log(automaton: Automaton):
     print(automaton.get_cursor_position())
 
 def region(automaton: Automaton):
-    automaton.grab_roi("node")
+    automaton.grab(False)
 
 def main():
     atom = Automaton("LimbusCompany")
