@@ -1,0 +1,50 @@
+{
+    "chicken-tango": {
+        "image": "chicken-tango.png",
+        "choice": 2,
+        "advantages": [],
+        "sinners": []
+    },
+    "paper-crane": {
+        "image": "paper-crane.png",
+        "choice": 2,
+        "advantages": ["lust", "sloth"],
+        "sinners": ["rodion"]
+    },
+    "teddy-bear": {
+        "image": "teddy-bear.png",
+        "choice": 2,
+        "advantages": ["lust", "gloom"],
+        "sinners": []
+    },
+    "star-fortune": {
+        "image": "star-fortune.png",
+        "choice": 2,
+        "advantages": ["lust", "pride"],
+        "sinners": []
+    },
+    "scarlet-moths": {
+        "image": "scarlet-moths.png",
+        "choice": 1,
+        "advantages": [],
+        "sinners": []
+    },
+    "golden-urn": {
+        "image": "golden-urn.png",
+        "choice": 2,
+        "advantages": ["gluttony", "pride"],
+        "sinners": []
+    },
+    "rock-paper-scissor": {
+        "image": "rock-paper-scissor.png",
+        "choice": 2,
+        "advantages": [],
+        "sinners": []
+    },
+    "burning-book": {
+        "image": "burning-book.png",
+        "choice": 1,
+        "advantages": [],
+        "sinners": []
+    }
+}
