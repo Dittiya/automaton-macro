@@ -26,3 +26,14 @@ def detect_object(target_descriptor, train_descriptor, ratio: float=0.75, min: i
             candidates.append([m])
 
     return len(candidates) > min
+
+def match_feature_knn(target_descriptor, train_descriptor, ratio: float=0.75) -> bool:
+    matcher = cv.BFMatcher(cv.NORM_HAMMING)
+    matches = matcher.knnMatch(target_descriptor, train_descriptor, k=2)
+
+    candidates = []
+    for m, n in matches:
+        if m.distance < ratio*n.distance:
+            candidates.append([m])
+
+    return len(candidates)
