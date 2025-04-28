@@ -1,5 +1,5 @@
 from cv2.typing import MatLike
-from automaton.feature_detection import match_feature, detect_feature
+from cvision.feature_detection import match_feature, detect_feature
 from limbus.data import Config, Encounter, Encounters, Node, Deviations
 from limbus.utils import min_max
 from limbus.image import read_image, process_image

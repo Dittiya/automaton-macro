@@ -1,5 +1,5 @@
 from automaton.imager import Window, get_window_data, grab_window, set_window_top, grab_region, read_image
-from automaton.feature_detection import detect_feature, detect_object
+from cvision.feature_detection import detect_feature, detect_object
 from pathlib import Path
 import os
 import pyautogui 
