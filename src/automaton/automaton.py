@@ -25,8 +25,22 @@ class Automaton:
         y += self.window.top
 
         return x, y
+    
+    def __relative_XY(self, x: int|list|tuple, y: int) -> tuple[int, int]:
+
+        if type(x) is not int:
+            if y is None:
+                x, y = x
+    
+        x -= self.window.left
+        y -= self.window.top
+
+        return x, y
 
     def get_cursor_position(self) -> None:
+        x, y = pyautogui.position()
+        point = self.__relative_XY(x, y)
+        print(f"Absolute: ({x}, {y}), Relative: {point}")
         return pyautogui.position()
     
     def start(self):
