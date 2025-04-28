@@ -80,10 +80,12 @@ class Automaton:
             time.sleep(self.delay)
 
     def centerize_cursor(self):
-        center_x = int(self.window.width * 0.5)
-        center_y = int(self.window.height * 0.5)
+        x = int(self.window.width * 0.5)
+        y = int(self.window.height * 0.5)
 
-        pyautogui.moveTo(center_x, center_y)
+        x, y = self.__normalize_XY(x, y)
+
+        pyautogui.moveTo(x, y)
 
     def drag(self, x: int, y: int, btn: str='left') -> None:
         if not self.state:
