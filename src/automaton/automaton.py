@@ -107,6 +107,12 @@ class Automaton:
             
         pyautogui.drag(x, y, 0.25, button=btn)
 
+    def pixel_search(self, x: int, y: int, color: str):
+        x, y = self.__relative_XY(x, y)
+        img = read_image(f"{self.img_storage}\{self.name}.png")
+
+        return match_pixel(img, (x,y), color)
+
     def grab_roi(self, name: str) -> None:
         x, y = self.get_cursor_position()
 
