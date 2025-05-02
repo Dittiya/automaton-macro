@@ -1,8 +1,13 @@
+"""
+Image processing library to support the main automaton library
+"""
+
 from win32gui import FindWindow, GetWindowRect, SetForegroundWindow, GetClientRect
 from typing import NamedTuple
 from cv2.typing import MatLike
 from mss import mss, tools
 from ctypes import windll
+from math import floor
 import cv2
 import time
 
@@ -45,9 +50,13 @@ def grab_region(window: Window, output: str) -> None:
     if [x for x in [window, output] if x is None]:
         return TypeError("Type must not be None")
 
-    sct = mss()
-    sct_img = sct.grab(window._asdict())
-    tools.to_png(sct_img.rgb, sct_img.size, output=output)
+    with mss() as sct:
+        sct_img = sct.grab(window._asdict())
+
+        if ".png" not in output:
+            output = f"{output}.png"
+
+        tools.to_png(sct_img.rgb, sct_img.size, output=output)
 
 def read_image(dir: str, option: str="") -> MatLike:
     img = cv2.imread(dir)
