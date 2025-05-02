@@ -79,8 +79,22 @@ class Automaton:
         if mouse is False:
             pyautogui.moveTo(self.window.width+100, self.window.height+100)
 
-        grab_window(self.window)
-        print(f"Looking at {self.window}")
+        grab_region(self.window, f"{self.img_storage}\{self.name}")
+        # print(f"Looking at {self.window}")
+
+    def grab_region(self, name: str, region_start: list|tuple, region_end: list|tuple, mouse: bool=True):
+        x_start, y_start = self.__normalize_XY(region_start)
+        x_end, y_end = self.__normalize_XY(region_end)
+
+        # temporary, not tested
+        if mouse is False:
+            x, y = pyautogui.position()
+            if (x >= x_start and x <= x_end) and (y >= y_start and y <= y_end):
+                self.centerize_cursor()
+
+        region = Window(self.window.hwnd, x_start, y_start,
+                        x_end-x_start, y_end-y_start)
+        grab_region(region, f"{self.img_storage}\{name}.png")
 
     def zoom(self, clicks: int):
         if not self.state:
