@@ -29,6 +29,7 @@ def process_image(img: MatLike, flags=[]):
 
     for flag in flags:
         mean, median = numpy.mean(im), numpy.median(im)
+        # print(flag, median)
 
         match flag:
             case "gray":
@@ -38,9 +39,10 @@ def process_image(img: MatLike, flags=[]):
             case "canny":
                 im = canny_edge_detection(im, 50, 100)
             case "thresh":
-                thresh = 50
+                thresh = 60
                 if median <= 5: thresh = 20
                 elif median <= 10: thresh = 30
+                elif median <= 15: thresh = 50
 
                 im = thresholding(im, thresh)
             case "brighten":
@@ -53,4 +55,5 @@ def process_image(img: MatLike, flags=[]):
 
                 im = cv2.cvtColor(temp, cv2.COLOR_HSV2RGB)
         
+    # cv2.imwrite("out.png", im)
     return im
