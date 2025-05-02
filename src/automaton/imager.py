@@ -60,3 +60,23 @@ def read_image(dir: str, option: str="") -> MatLike:
 
 def gray_image(img: MatLike) -> MatLike:
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+def match_pixel(img: MatLike, location: tuple, color: str) -> bool:
+    x, y = location
+    hex = to_hex(img[y,x])
+
+    if hex == color:
+        return True
+    return False
+
+def to_hex(rgb: tuple|list) -> str:
+    mapper = [str(x) for x in range(10)] + [chr(x) for x in range(65, 71)]
+    hex = "0x"
+    
+    for channel in rgb:
+        c1 = floor(channel/16)
+        c2 = channel%16
+
+        hex += mapper[c1] + mapper[c2]
+
+    return hex
