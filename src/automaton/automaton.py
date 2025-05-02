@@ -1,4 +1,4 @@
-from automaton.imager import Window, get_window_data, grab_window, set_window_top, grab_region, read_image
+from automaton.imager import Window, get_window_data, set_window_top, grab_region, read_image, match_pixel
 from cvision.feature_detection import detect_feature, detect_object
 from pathlib import Path
 import os
@@ -15,7 +15,7 @@ class Automaton:
         self.img_storage = f"{Path().absolute().resolve()}\images"
         self._roi_coordinate = None
 
-    def __normalize_XY(self, x: int|list|tuple, y: int) -> tuple[int, int]:
+    def __normalize_XY(self, x: int|list|tuple, y: int|None) -> tuple[int, int]:
 
         if type(x) is not int:
             if y is None:
@@ -26,7 +26,7 @@ class Automaton:
 
         return x, y
     
-    def __relative_XY(self, x: int|list|tuple, y: int) -> tuple[int, int]:
+    def __relative_XY(self, x: int|list|tuple, y: int=None) -> tuple[int, int]:
 
         if type(x) is not int:
             if y is None:
@@ -53,7 +53,7 @@ class Automaton:
             print(f"Stopping {self.name}")
             self.state = False
 
-    def click(self, x: int|list|tuple, y: int|None, clicks: int=1) -> None:
+    def click(self, x: int|list|tuple, y: int|None=None, clicks: int=1) -> None:
         x, y = self.__normalize_XY(x, y)
 
         pyautogui.moveTo(x, y)
