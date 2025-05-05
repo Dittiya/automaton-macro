@@ -39,8 +39,13 @@ class Automaton:
 
     def get_cursor_position(self) -> None:
         x, y = pyautogui.position()
-        point = self.__relative_XY(x, y)
-        print(f"Absolute: ({x}, {y}), Relative: {point}")
+
+        temp = self.pixel_context
+        self.pixel_context = "Screen"
+        window = self.__normalize_XY(x, y, "Pixel")
+
+        self.pixel_context = temp
+        print(f"Screen: ({x}, {y})\nWindow: {window}")
         return pyautogui.position()
     
     def start(self):
