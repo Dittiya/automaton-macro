@@ -59,7 +59,7 @@ class Automaton:
             self.state = False
 
     def click(self, x: int|list|tuple, y: int|None=None, clicks: int=1) -> None:
-        x, y = self.__normalize_XY(x, y)
+        x, y = self.__normalize_XY(x, y, mode="Mouse")
 
         pyautogui.moveTo(x, y)
         pyautogui.click(x, y, clicks=clicks, interval=self.delay)
@@ -88,8 +88,8 @@ class Automaton:
         # print(f"Looking at {self.window}")
 
     def grab_region(self, name: str, region_start: list|tuple, region_end: list|tuple, mouse: bool=True):
-        x_start, y_start = self.__normalize_XY(region_start)
-        x_end, y_end = self.__normalize_XY(region_end)
+        x_start, y_start = self.__normalize_XY(region_start, mode="Pixel")
+        x_end, y_end = self.__normalize_XY(region_end, mode="Pixel")
 
         # temporary, not tested
         if mouse is False:
@@ -116,7 +116,7 @@ class Automaton:
         x = int(self.window.width * 0.5)
         y = int(self.window.height * 0.5)
 
-        x, y = self.__normalize_XY(x, y)
+        x, y = self.__normalize_XY(x, y, "Mouse")
 
         pyautogui.moveTo(x, y)
 
@@ -126,8 +126,8 @@ class Automaton:
             
         pyautogui.drag(x, y, 0.25, button=btn)
 
-    def pixel_search(self, x: int, y: int, color: str):
-        x, y = self.__relative_XY(x, y)
+    def pixel_search(self, x: int|tuple|list, y: int|None, color: str):
+        x, y = self.__normalize_XY(x, y, "Pixel")
         img = read_image(f"{self.img_storage}\{self.name}.png")
 
         return match_pixel(img, (x,y), color)
