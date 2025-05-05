@@ -15,16 +15,26 @@ class Automaton:
         self.img_storage = f"{Path().absolute().resolve()}\images"
         self._roi_coordinate = None
 
-    def __normalize_XY(self, x: int|list|tuple, y: int|None) -> tuple[int, int]:
-
+    def __normalize_XY(self, x: int|list|tuple=None, y: int|None=None, mode: str="") -> tuple[int, int]:
         if type(x) is not int:
             if y is None:
                 x, y = x
-    
-        x += self.window.left
-        y += self.window.top
 
-        return x, y
+        match mode:
+            case "Mouse":
+                match self.mouse_context:
+                    case "Window":
+                        return x+self.window.left, y+self.window.top
+                    case _:
+                        return x, y
+            case "Pixel":
+                match self.pixel_context:
+                    case "Screen":
+                        return x-self.window.left, y-self.window.top
+                    case _:
+                        return x, y
+            case _:
+                return ValueError()
     
     def __relative_XY(self, x: int|list|tuple, y: int=None) -> tuple[int, int]:
 
