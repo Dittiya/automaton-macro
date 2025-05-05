@@ -111,6 +111,9 @@ class Dungeon:
         self.encounters: list = [0 for _ in range(len(Encounters))]
 
         self.map_encounters(self.encounters_dir)
+        self.map()
+        self.find_lines()
+        self.map_connections()
 
     def map_encounters(self, dir: str):
         for file in os.listdir(dir):
