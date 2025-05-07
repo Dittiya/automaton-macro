@@ -24,7 +24,9 @@ def wait_pixel(automaton: Automaton, location: tuple, color: str):
             break
 
 def pix_search(automaton: Automaton):
+    automaton.pixel_context = "Screen"
     loc = automaton.pixel_search(708, 149, "0x970A09")
+    automaton.pixel_context = "Window"
     print(loc)
     return loc
 
@@ -42,8 +44,9 @@ def grabber(automaton: Automaton):
     if automaton.state is False:
         return
     
-    start_time = time()
+    automaton.pixel_context = "Screen"
 
+    start_time = time()
     PARENT_DIR = Path().absolute().resolve()
 
     reposition(automaton)
@@ -56,9 +59,6 @@ def grabber(automaton: Automaton):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     md = Dungeon(img, config=Config(x_start=210), encounters_dir=encounters)
 
-    md.map()
-    md.find_lines()
-    md.map_connections()
     path = md.crawl()
 
     print(f"Shortest/Most rewarding path: {path}")
