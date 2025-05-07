@@ -169,9 +169,9 @@ class Dungeon:
             img = dungeon[node.y:node.y+node.height, node.x:node.x+node.width]
             _, descriptor = detect_feature(img, self.edge_threshold)
 
-            if descriptor is None or len(descriptor) < 15:
+            if descriptor is None or len(descriptor) < 30:
                 continue
-
+            
             candidates = []
             for encounter in self.encounters:
                 matches = match_feature(encounter.descriptor, descriptor, sort=True)
