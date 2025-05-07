@@ -23,9 +23,9 @@ def thresholding(img: MatLike, threshold: int=50) -> MatLike:
 
 def process_image(img: MatLike, flags=[]):
     """
-    list of flags: gray, blur, canny, thresh
+    flags: gray, blur, canny, thresh, histeq
     """
-    im = img
+    im = img.copy()
 
     for flag in flags:
         mean, median = numpy.mean(im), numpy.median(im)
@@ -54,6 +54,8 @@ def process_image(img: MatLike, flags=[]):
                 temp[:,:,2] = cv2.add(temp[:,:,2], value)
 
                 im = cv2.cvtColor(temp, cv2.COLOR_HSV2RGB)
+            case "histeq":
+                im = cv2.equalizeHist(im)
         
     # cv2.imwrite("out.png", im)
     return im
