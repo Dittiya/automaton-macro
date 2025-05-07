@@ -6,8 +6,24 @@ import pyautogui
 import time
 
 class Automaton:
+    """
+    A class used to represent an automata
+
+    Attributes
+    ----------
+    name : str
+        name of the automata
+    mouse_context : str
+        switch between Screen or Window context for mouse interaction (default Window)
+    pixel_context : str
+        switch between Screen or Window context for pixel interaction (default Window)
+    state : bool
+        the state of the instance
+    """
     def __init__(self, name: str):
         self.name = name
+        self.mouse_context: str = "Window"
+        self.pixel_context: str = "Window"
         self.state = False
         self.vision = None
         self.window = get_window_data(self.name)
